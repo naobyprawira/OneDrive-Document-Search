@@ -55,8 +55,8 @@ The system consists of four main services:
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd document_search_stack
+   git clone https://github.com/naobyprawira/OneDrive-Document-Search.git
+   cd OneDrive-Document-Search
    ```
 
 2. **Configure environment variables**
