@@ -1,4 +1,4 @@
-# Document Search Stack
+# OneDrive Document Search System
 
 A comprehensive document search system that syncs PDF files from OneDrive, performs OCR extraction, generates AI-powered summaries, and enables semantic search with a user-friendly Streamlit interface.
 
@@ -14,33 +14,38 @@ A comprehensive document search system that syncs PDF files from OneDrive, perfo
 
 ## 🏗️ Architecture
 
-The system consists of four main services:
+The system consists of five main components:
 
 ```
-┌─────────────────┐
+                    ┌──────────────┐
+                    │  OCR Service │ ← External PDF Text Extraction
+                    └──────▲───────┘
+                           │
+┌─────────────────┐        │
 │  Streamlit App  │ ← User Interface (Port 8501)
-└────────┬────────┘
-         │
-┌────────▼────────┐
+└────────┬────────┘        │
+         │                 │
+┌────────▼────────┐        │
 │ Search Service  │ ← FastAPI Search API (Port 8000)
-└────────┬────────┘
-         │
-┌────────▼─────────┐
+└────────┬────────┘        │
+         │                 │
+┌────────▼─────────┐       │
 │     Qdrant       │ ← Vector Database (Port 6333)
-└──────────────────┘
-         ▲
-         │
-┌────────┴─────────┐
-│ Ingestion Service│ ← OneDrive Sync & Processing (Port 8001)
+└──────────────────┘       │
+         ▲                 │
+         │                 │
+┌────────┴─────────┐       │
+│ Ingestion Service│ ──────┘ OneDrive Sync & Processing (Port 8001)
 └──────────────────┘
 ```
 
 ### Services
 
-1. **Ingestion Service** - Syncs files from OneDrive, processes PDFs with OCR, generates embeddings and summaries, stores in Qdrant
-2. **Search Service** - Provides search API with hybrid dense + sparse vector search
-3. **Streamlit App** - Web UI for searching documents and viewing results
-4. **Qdrant** - Vector database storing document and chunk embeddings with BM25 sparse vectors
+1. **OCR Service** (External) - Extracts text from PDF files page by page
+2. **Ingestion Service** - Syncs files from OneDrive, processes PDFs with OCR, generates embeddings and summaries, stores in Qdrant
+3. **Search Service** - Provides search API with hybrid dense + sparse vector search
+4. **Streamlit App** - Web UI for searching documents and viewing results
+5. **Qdrant** - Vector database storing document and chunk embeddings with BM25 sparse vectors
 
 ## 🚀 Quick Start
 
@@ -49,28 +54,43 @@ The system consists of four main services:
 - Docker and Docker Compose
 - Google Gemini API key ([Get one here](https://aistudio.google.com/app/apikey))
 - Azure AD app with Microsoft Graph API permissions (Files.Read.All)
-- OCR service endpoint (e.g., ngrok tunnel to local OCR service)
+- OCR service running (see setup below)
 
 ### Setup
 
-1. **Clone the repository**
+1. **Set up OCR Service (Required)**
+   
+   The document search system requires a separate OCR service for PDF text extraction.
+   
    ```bash
-   git clone <repository-url>
-   cd document_search_stack
+   # Clone the OCR service repository
+   git clone https://github.com/naobyprawira/ocr-service.git
+   cd ocr-service
+   
+   # Follow the setup instructions in the OCR service README
+   # Start the OCR service and note the endpoint URL
+   ```
+   
+   Once running, you'll need the OCR service endpoint URL (e.g., `https://your-ocr-service.ngrok-free.app/ocr`)
+
+2. **Clone the repository**
+   ```bash
+   git clone https://github.com/naobyprawira/OneDrive-Document-Search.git
+   cd OneDrive-Document-Search
    ```
 
-2. **Configure environment variables**
+3. **Configure environment variables**
    ```bash
    cp .env.example .env
-   # Edit .env with your credentials
+   # Edit .env with your credentials and OCR service URL
    ```
 
-3. **Start the services**
+4. **Start the services**
    ```bash
    docker-compose up -d
    ```
 
-4. **Access the application**
+5. **Access the application**
    - Streamlit UI: http://localhost:8501
    - Search API: http://localhost:8000
    - Ingestion API: http://localhost:8001
@@ -122,7 +142,7 @@ curl "http://localhost:8000/search?query=laporan+keuangan&top_k=5"
 ## 📂 Project Structure
 
 ```
-document_search_stack/
+OneDrive-Document-Search/
 ├── ingestion_service/     # OneDrive sync and document processing
 │   ├── main.py           # FastAPI app with scheduler
 │   ├── pipeline.py       # Document processing pipeline
@@ -218,17 +238,5 @@ Both collections use:
 
 **"v_bm25 not found" error:**
 - Collections need BM25 support
-- Ensure using `documents_v2` and `chunks_v2` collections
+- Ensure using `documents` and `chunks` collections
 - These were created with sparse vector configuration
-
-## 📄 License
-
-[Your License Here]
-
-## 🤝 Contributing
-
-Contributions welcome! Please open an issue or submit a pull request.
-
-## 📧 Support
-
-For issues and questions, please open a GitHub issue.
