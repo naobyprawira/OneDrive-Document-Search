@@ -14,8 +14,8 @@ from qdrant_client import QdrantClient
 from qdrant_client.http import models as qmodels
 from fastembed import SparseTextEmbedding
 
-DOC_COLLECTION = "documents_v2"
-CHUNK_COLLECTION = "chunks_v2"
+DOC_COLLECTION = os.getenv("DOC_COLLECTION", "documents_v2")
+CHUNK_COLLECTION = os.getenv("CHUNK_COLLECTION", "chunks_v2")
 DOC_VECTOR_NAME = "v_doc"
 CHUNK_VECTOR_NAME = "v_chunk"
 BM25_VECTOR_NAME = "v_bm25"

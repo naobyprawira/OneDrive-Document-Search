@@ -7,8 +7,8 @@ from pathlib import Path
 # Qdrant configuration
 QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
 QDRANT_PORT = int(os.getenv("QDRANT_PORT", "6333"))
-DOC_COLLECTION = "documents_v2"
-CHUNK_COLLECTION = "chunks_v2"
+DOC_COLLECTION = os.getenv("DOC_COLLECTION", "documents_v2")
+CHUNK_COLLECTION = os.getenv("CHUNK_COLLECTION", "chunks_v2")
 DOC_VECTOR_NAME = "v_doc"
 CHUNK_VECTOR_NAME = "v_chunk"
 

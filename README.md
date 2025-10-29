@@ -63,6 +63,18 @@ The system consists of five main components:
    The document search system requires a separate OCR service for PDF text extraction.
    
    ```bash
+   # Clone the OCR service repository
+   git clone https://github.com/naobyprawira/ocr-service.git
+   cd ocr-service
+   
+   # Follow the setup instructions in the OCR service README
+   # Start the OCR service and note the endpoint URL
+   ```
+   
+   Once running, you'll need the OCR service endpoint URL (e.g., `https://your-ocr-service.ngrok-free.app/ocr`)
+
+2. **Clone this repository**
+   ```bash
    git clone https://github.com/naobyprawira/OneDrive-Document-Search.git
    cd OneDrive-Document-Search
    ```
@@ -97,6 +109,8 @@ Key environment variables in `.env`:
 | `ONEDRIVE_DRIVE_ID` | OneDrive drive ID | Required |
 | `ONEDRIVE_ROOT_PATH` | Folder path to sync | `AI/Document Filing` |
 | `OCR_SERVICE_URL` | OCR endpoint URL | Required |
+| `DOC_COLLECTION` | Qdrant documents collection name | `documents` |
+| `CHUNK_COLLECTION` | Qdrant chunks collection name | `chunks` |
 | `EMBED_DIM` | Embedding dimension | `3072` |
 | `CHUNK_SIZE` | Text chunk size (chars) | `2000` |
 | `SCHEDULE_CRON` | Sync schedule | `0 0 * * *` (daily) |
@@ -203,10 +217,10 @@ docker-compose down
 
 ## 📊 Collections
 
-The system uses two Qdrant collections:
+The system uses two Qdrant collections (configurable via environment variables):
 
-- **documents** - Document-level vectors and metadata
-- **chunks** - Chunk-level vectors for fine-grained search
+- **documents** (or custom name via `DOC_COLLECTION`) - Document-level vectors and metadata
+- **chunks** (or custom name via `CHUNK_COLLECTION`) - Chunk-level vectors for fine-grained search
 
 Both collections use:
 - Dense vectors (3072-dim) for semantic search
@@ -225,6 +239,6 @@ Both collections use:
 - Verify search service can connect to Qdrant
 
 **"v_bm25 not found" error:**
-- Collections need BM25 support
-- Ensure using `documents` and `chunks` collections
-- These were created with sparse vector configuration
+- Collections need BM25 support (sparse vectors)
+- Ensure collections are created with sparse vector configuration
+- Check that `DOC_COLLECTION` and `CHUNK_COLLECTION` environment variables match your Qdrant collections
