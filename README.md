@@ -1,4 +1,4 @@
-# Document Search Stack
+# OneDrive Document Search System
 
 A comprehensive document search system that syncs PDF files from OneDrive, performs OCR extraction, generates AI-powered summaries, and enables semantic search with a user-friendly Streamlit interface.
 
