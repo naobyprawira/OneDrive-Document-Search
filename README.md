@@ -63,18 +63,6 @@ The system consists of five main components:
    The document search system requires a separate OCR service for PDF text extraction.
    
    ```bash
-   # Clone the OCR service repository
-   git clone https://github.com/naobyprawira/ocr-service.git
-   cd ocr-service
-   
-   # Follow the setup instructions in the OCR service README
-   # Start the OCR service and note the endpoint URL
-   ```
-   
-   Once running, you'll need the OCR service endpoint URL (e.g., `https://your-ocr-service.ngrok-free.app/ocr`)
-
-2. **Clone the repository**
-   ```bash
    git clone https://github.com/naobyprawira/OneDrive-Document-Search.git
    cd OneDrive-Document-Search
    ```
