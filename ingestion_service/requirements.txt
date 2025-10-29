@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+apscheduler
+qdrant-client
+google-genai
+requests
+python-dotenv
+PyPDF2
+openai
+fastembed
